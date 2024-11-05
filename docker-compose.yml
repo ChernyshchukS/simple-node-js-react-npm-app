@@ -9,20 +9,22 @@ services:
   ssh-agent:
     image: jenkins/ssh-agent
     container_name: ${APP_NAME:?err}-ssh-agent
+    ports:
+      - "443:443"
   node:
     image: node
     container_name: ${APP_NAME:?err}-node
     user: node
-    working_dir: /home/node/app
+    working_dir: /var/jenkins_home/workspace/simple-node-js-react-npm-app
     environment:
       - NODE_ENV=production
     volumes:
-      - ./:/home/node/app
+      - ./:/var/jenkins_home/workspace/simple-node-js-react-npm-app
       - ./log:/home/node/.npm/
     expose:
       - "8081"
     ports: # use if it is necessary to expose the container to the host machine
-      - "8001:8001"
+      - "3000:3000"
     command: "node ./src/App.js"
     
 networks:
